@@ -37,7 +37,7 @@ namespace APICatalogoCursoNET6.Migrations
 
                     b.HasKey("CategoriaId");
 
-                    b.ToTable("Categorias");
+                    b.ToTable("Categorias", (string)null);
                 });
 
             modelBuilder.Entity("APICatalogoCursoNET6.Models.Produto", b =>
@@ -77,7 +77,7 @@ namespace APICatalogoCursoNET6.Migrations
 
                     b.HasIndex("CategoriaId");
 
-                    b.ToTable("Produtos");
+                    b.ToTable("Produtos", (string)null);
                 });
 
             modelBuilder.Entity("APICatalogoCursoNET6.Models.Produto", b =>
