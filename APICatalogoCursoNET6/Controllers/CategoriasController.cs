@@ -1,5 +1,6 @@
 ﻿using APICatalogoCursoNET6.Data;
 using APICatalogoCursoNET6.Models;
+using APICatalogoCursoNET6.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,12 @@ namespace APICatalogoCursoNET6.Controllers
         public CategoriasController(AppDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("/saudacao/{nome}")]
+        public ActionResult<string> GetSaudacao([FromServices] IMeuServico meuServico, string nome)
+        {
+            return meuServico.Saudacao(nome);
         }
 
         [HttpGet("produtos")]
