@@ -10,13 +10,13 @@ namespace APICatalogoCursoNET6.Models
         [Key]
         public int ProdutoId { get; set; }
 
-        [Required, StringLength(80)]
+        [Required(ErrorMessage = "O nome é obrigatório"), StringLength(80, ErrorMessage = "o nome deve conter entre 5 e 20 caracteres", MinimumLength = 5)]
         public string? Nome { get; set; }
 
-        [Required, StringLength(300)]
+        [Required(ErrorMessage = "O nome é obrigatório"), StringLength(300, ErrorMessage = "A descricao de conter no máximo {1} caracteres")]
         public string? Descricao { get; set; }
 
-        [Required, Column(TypeName = "decimal(10,2)")]
+        [Required, Column(TypeName = "decimal(10,2)"), Range(1, 1000, ErrorMessage = "O preço deve ser entre {1} e {2}")]
         public decimal Preco { get; set; }
 
         [Required, StringLength(300)]
