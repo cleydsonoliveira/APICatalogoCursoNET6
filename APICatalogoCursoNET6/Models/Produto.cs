@@ -1,5 +1,4 @@
-﻿using APICatalogoCursoNET6.Validations;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -13,7 +12,7 @@ namespace APICatalogoCursoNET6.Models
 
         [Required(ErrorMessage = "O nome é obrigatório")]
         [StringLength(80, ErrorMessage = "o nome deve conter entre 5 e 20 caracteres", MinimumLength = 5)]
-        [PrimeiraLetraMaiuscula]
+        //[PrimeiraLetraMaiuscula]
         public string? Nome { get; set; }
 
         [Required(ErrorMessage = "O nome é obrigatório")]
@@ -39,8 +38,19 @@ namespace APICatalogoCursoNET6.Models
                 var primeiraLetra = this.Nome[0].ToString();
                 if (primeiraLetra != primeiraLetra.ToUpper())
                 {
-                    yield
+                    yield return new ValidationResult("A primeira letra do nome deve ser maúscula",
+                        new[] {
+                            nameof(this.Nome) }
+                        );
                 }
+            }
+
+            if (this.Estoque <= 0)
+            {
+                yield return new ValidationResult("O estoque deve ser maior que 0",
+                    new[] {
+                        nameof(this.Estoque) }
+                    );
             }
         }
     }
