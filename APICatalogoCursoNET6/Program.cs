@@ -1,4 +1,6 @@
 using APICatalogoCursoNET6.Data;
+using APICatalogoCursoNET6.Extensions;
+using APICatalogoCursoNET6.Filters;
 using APICatalogoCursoNET6.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -12,6 +14,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 );
 
 builder.Services.AddTransient<IMeuServico, MeuServico>();
+builder.Services.AddScoped<ApiLoggingFilter>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,6 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
 

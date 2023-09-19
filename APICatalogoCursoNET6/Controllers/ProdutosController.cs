@@ -1,4 +1,5 @@
 ﻿using APICatalogoCursoNET6.Data;
+using APICatalogoCursoNET6.Filters;
 using APICatalogoCursoNET6.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace APICatalogoCursoNET6.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Produto>> GetAll()
         {
             var produtos = _context.Produtos.Take(10).AsNoTracking().ToList();
@@ -27,6 +29,7 @@ namespace APICatalogoCursoNET6.Controllers
         [HttpGet("{id:int}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
+            //throw new Exception("Deu erro aqui pae");
             var produto = _context.Produtos.Take(10).AsNoTracking().FirstOrDefault(x => x.ProdutoId == id);
             if (produto == null) return NotFound("Produto não encontrado");
             return Ok(produto);
