@@ -11,10 +11,12 @@ namespace APICatalogoCursoNET6.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ILogger _logger;
 
-        public CategoriasController(AppDbContext context)
+        public CategoriasController(AppDbContext context, ILogger<CategoriasController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet("/saudacao/{nome}")]
@@ -26,6 +28,7 @@ namespace APICatalogoCursoNET6.Controllers
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriesProducts()
         {
+            _logger.LogInformation("######### GetCategorias Produtos #############");
             return _context.Categorias.Take(10).Include(p => p.Produtos).Where(c => c.CategoriaId <= 5).AsNoTracking().ToList();
         }
 
