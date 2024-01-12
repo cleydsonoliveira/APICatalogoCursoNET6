@@ -24,17 +24,18 @@ namespace APICatalogoCursoNET6.Repositories
 
         public void Add(T entity)
         {
-            throw new NotImplementedException();
+           _appDbContext.Set<T>().Add(entity);
         }
 
         public void Delete(T entity)
         {
-            throw new NotImplementedException();
+            _appDbContext.Set<T>().Remove(entity);
         }
 
         public void Update(T entity)
         {
-            throw new NotImplementedException();
+            _appDbContext.Entry(entity).State = EntityState.Modified;
+            _appDbContext.Set<T>().Update(entity);
         }
     }
 }

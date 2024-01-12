@@ -19,11 +19,11 @@ namespace APICatalogoCursoNET6.Controllers
             _logger = logger;
         }
 
-        [HttpGet("/saudacao/{nome}")]
-        public ActionResult<string> GetSaudacao([FromServices] IMeuServico meuServico, string nome)
-        {
-            return meuServico.Saudacao(nome);
-        }
+        //[HttpGet("/saudacao/{nome}")]
+        //public ActionResult<string> GetSaudacao([FromServices] IMeuServico meuServico, string nome)
+        //{
+        //    return meuServico.Saudacao(nome);
+        //}
 
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriesProducts()
