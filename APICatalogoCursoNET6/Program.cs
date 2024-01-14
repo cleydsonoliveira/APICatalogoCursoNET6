@@ -1,8 +1,10 @@
 using APICatalogoCursoNET6.Data;
+using APICatalogoCursoNET6.DTOs.Mappings;
 using APICatalogoCursoNET6.Extensions;
 using APICatalogoCursoNET6.Filters;
 using APICatalogoCursoNET6.Repositories;
 using APICatalogoCursoNET6.Services;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -12,9 +14,17 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
 );
 
+var mappingConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mappingConfig.CreateMapper();
+
 builder.Services.AddTransient<IMeuServico, MeuServico>();
 builder.Services.AddScoped<ApiLoggingFilter>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
