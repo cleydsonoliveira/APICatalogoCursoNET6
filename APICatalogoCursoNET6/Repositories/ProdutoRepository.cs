@@ -5,11 +5,13 @@ namespace APICatalogoCursoNET6.Repositories
 {
     public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
-        public ProdutoRepository(AppDbContext context) : base(context) { }
+        public ProdutoRepository(AppDbContext contexto) : base(contexto)
+        {
+        }
 
         public IEnumerable<Produto> GetProdutosPorPreco()
         {
-            return Get().OrderBy(x => x.Preco).ToList();
+            return Get().OrderBy(c => c.Preco).ToList();
         }
     }
 }

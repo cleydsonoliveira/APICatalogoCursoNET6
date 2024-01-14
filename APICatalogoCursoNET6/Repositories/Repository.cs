@@ -6,36 +6,37 @@ namespace APICatalogoCursoNET6.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected AppDbContext _appDbContext;
-        public Repository(AppDbContext appDbContext)
+        protected AppDbContext _context;
+
+        public Repository(AppDbContext contexto)
         {
-            appDbContext = _appDbContext;
+            _context = contexto;
         }
 
         public IQueryable<T> Get()
         {
-            return _appDbContext.Set<T>().AsNoTracking();
+            return _context.Set<T>().AsNoTracking();
         }
 
         public T GetById(Expression<Func<T, bool>> predicate)
         {
-            return _appDbContext.Set<T>().SingleOrDefault(predicate);
+            return _context.Set<T>().AsNoTracking().SingleOrDefault(predicate);
         }
 
         public void Add(T entity)
         {
-           _appDbContext.Set<T>().Add(entity);
+            _context.Set<T>().Add(entity);
         }
 
         public void Delete(T entity)
         {
-            _appDbContext.Set<T>().Remove(entity);
+            _context.Set<T>().Remove(entity);
         }
 
         public void Update(T entity)
         {
-            _appDbContext.Entry(entity).State = EntityState.Modified;
-            _appDbContext.Set<T>().Update(entity);
+            _context.Entry(entity).State = EntityState.Modified;
+            _context.Set<T>().Update(entity);
         }
     }
 }
