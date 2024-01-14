@@ -1,8 +1,7 @@
-﻿using APICatalogoCursoNET6.Data;
-using APICatalogoCursoNET6.Filters;
+﻿using APICatalogoCursoNET6.Filters;
 using APICatalogoCursoNET6.Models;
+using APICatalogoCursoNET6.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace APICatalogoCursoNET6.Controllers
 {
@@ -10,28 +9,33 @@ namespace APICatalogoCursoNET6.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public ProdutosController(AppDbContext context)
+        private readonly IUnitOfWork _unitOfWork;
+        public ProdutosController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+        }
+
+        [HttpGet("menorpreco")]
+        public ActionResult<IEnumerable<Produto>> GetProdutosPreco()
+        {
+            return _unitOfWork.ProdutoRepository.GetProdutosPorPreco().ToList();
         }
 
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Produto>> GetAll()
         {
-            var produtos = _context.Produtos.Take(10).AsNoTracking().ToList();
+            var produtos = _unitOfWork.ProdutoRepository.Get().ToList();
             if (produtos != null)
                 return Ok(produtos);
-            return NotFound();
+            return NotFound("Não há nenhum produto cadastrado.");
         }
 
         [HttpGet("{id:int}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
-            //throw new Exception("Deu erro aqui pae");
-            var produto = _context.Produtos.Take(10).AsNoTracking().FirstOrDefault(x => x.ProdutoId == id);
-            if (produto == null) return NotFound("Produto não encontrado");
+            var produto = _unitOfWork.ProdutoRepository.GetById(x => x.ProdutoId == id);
+            if (produto == null) return NotFound($"Produto com o id {id} não encontrado.");
             return Ok(produto);
         }
 
@@ -40,12 +44,12 @@ namespace APICatalogoCursoNET6.Controllers
         {
             if (produto != null)
             {
-                _context.Produtos.Add(produto);
-                _context.SaveChanges();
+                _unitOfWork.ProdutoRepository.Add(produto);
+                _unitOfWork.Commit();
 
                 return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
             }
-            return BadRequest("Não foi possivel salvar seu produto");
+            return BadRequest("Não foi possivel salvar seu produto.");
         }
 
         [HttpPut("{id:int}")]
@@ -53,11 +57,11 @@ namespace APICatalogoCursoNET6.Controllers
         {
             if (id != produto.ProdutoId)
             {
-                return BadRequest();
+                return BadRequest("O id do produto é divergente em relação ao id informado.");
             }
 
-            _context.Entry(produto).State = EntityState.Modified;
-            _context.SaveChanges();
+            _unitOfWork.ProdutoRepository.Update(produto);
+            _unitOfWork.Commit();
 
             return Ok(produto);
         }
@@ -65,13 +69,13 @@ namespace APICatalogoCursoNET6.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult<Produto> Delete(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(x => x.ProdutoId == id);
+            var produto = _unitOfWork.ProdutoRepository.GetById(x => x.ProdutoId == id);
             if (produto == null) return NotFound("Produto não localizado");
 
-            _context.Produtos.Remove(produto);
-            _context.SaveChanges();
+            _unitOfWork.ProdutoRepository.Delete(produto);
+            _unitOfWork.Commit();
 
-            return Ok(produto);
+            return Ok($"Produto {produto.Nome} com id {produto.ProdutoId} foi removido.");
         }
     }
 }
