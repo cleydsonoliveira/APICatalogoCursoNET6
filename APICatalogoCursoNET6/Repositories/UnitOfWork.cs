@@ -4,8 +4,8 @@ namespace APICatalogoCursoNET6.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private ProdutoRepository _produtoRepository;
-        private CategoriaRepository _categoriaRepository;
+        private ProdutoRepository? _produtoRepository;
+        private CategoriaRepository? _categoriaRepository;
         public AppDbContext _appDbContext;
 
         public UnitOfWork(AppDbContext appDbContext)
