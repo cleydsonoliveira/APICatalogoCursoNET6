@@ -48,7 +48,7 @@ namespace APICatalogoCursoNET6.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save([FromBody] ProdutoDTO produtoDTO)
+        public ActionResult<ProdutoDTO> Save([FromBody] ProdutoDTO produtoDTO)
         {
             var produto = _mapper.Map<Produto>(produtoDTO);
             _unitOfWork.ProdutoRepository.Add(produto);
