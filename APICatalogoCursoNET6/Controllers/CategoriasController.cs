@@ -1,5 +1,6 @@
 ﻿using APICatalogoCursoNET6.DTOs;
 using APICatalogoCursoNET6.Models;
+using APICatalogoCursoNET6.Pagination;
 using APICatalogoCursoNET6.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,9 @@ namespace APICatalogoCursoNET6.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<CategoriaDTO>> GetAll()
+        public ActionResult<IEnumerable<CategoriaDTO>> GetAll([FromQuery] CategoriasParameters categoriasParameters)
         {
-            var categorias = _unitOfWork.CategoriaRepository.Get().ToList();
+            var categorias = _unitOfWork.CategoriaRepository.GetCategorias(categoriasParameters).ToList();
             if (categorias == null) return NotFound();
             var categoriasDTO = _mapper.Map<IEnumerable<CategoriaDTO>>(categorias);
             return Ok(categoriasDTO);
