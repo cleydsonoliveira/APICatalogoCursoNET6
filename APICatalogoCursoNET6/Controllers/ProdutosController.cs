@@ -1,6 +1,7 @@
 ﻿using APICatalogoCursoNET6.DTOs;
 using APICatalogoCursoNET6.Filters;
 using APICatalogoCursoNET6.Models;
+using APICatalogoCursoNET6.Pagination;
 using APICatalogoCursoNET6.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -30,9 +31,9 @@ namespace APICatalogoCursoNET6.Controllers
 
         [HttpGet]
         [ServiceFilter(typeof(ApiLoggingFilter))]
-        public ActionResult<IEnumerable<ProdutoDTO>> GetAll()
+        public ActionResult<IEnumerable<ProdutoDTO>> GetAll([FromQuery] ProdutosParameters produtosParameters)
         {
-            var produtos = _unitOfWork.ProdutoRepository.Get().ToList();
+            var produtos = _unitOfWork.ProdutoRepository.GetProdutos(produtosParameters).ToList();
             var produtosDTO = _mapper.Map<List<ProdutoDTO>>(produtos);
             if (produtos != null) return produtosDTO;
             return NotFound("Não há nenhum produto cadastrado.");
