@@ -11,7 +11,7 @@ namespace APICatalogoCursoNET6.Repositories
 
         public IEnumerable<Categoria> GetCategorias(CategoriasParameters categoriasParameters)
         {
-            return GetCategorias(categoriasParameters)
+            return Get()
                 .OrderBy(x => x.Nome)
                 .Skip((categoriasParameters.PageNumber - 1) * categoriasParameters.PageSize)
                 .Take(categoriasParameters.PageSize)
