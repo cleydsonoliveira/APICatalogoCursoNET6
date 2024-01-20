@@ -9,7 +9,7 @@ namespace APICatalogoCursoNET6.Repositories
         public ProdutoRepository(AppDbContext contexto) : base(contexto)
         {
         }
-        public IEnumerable<Produto> GetAll(ProdutosParameters produtosParameters)
+        public IEnumerable<Produto> GetProdutos(ProdutosParameters produtosParameters)
         {
             return Get()
                 .OrderBy(x => x.Nome)
