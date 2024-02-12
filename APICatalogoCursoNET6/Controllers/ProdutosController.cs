@@ -5,6 +5,7 @@ using APICatalogoCursoNET6.Pagination;
 using APICatalogoCursoNET6.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace APICatalogoCursoNET6.Controllers
 {
@@ -33,7 +34,20 @@ namespace APICatalogoCursoNET6.Controllers
         [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<ProdutoDTO>> GetAll([FromQuery] ProdutosParameters produtosParameters)
         {
-            var produtos = _unitOfWork.ProdutoRepository.GetProdutos(produtosParameters).ToList();
+            var produtos = _unitOfWork.ProdutoRepository.GetProdutos(produtosParameters);
+
+            var metadata = new
+            {
+                produtos.TotalCount,
+                produtos.PageSize,
+                produtos.CurrentPage,
+                produtos.TotalPages,
+                produtos.HasNext,
+                produtos.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
             var produtosDTO = _mapper.Map<List<ProdutoDTO>>(produtos);
             if (produtos != null) return produtosDTO;
             return NotFound("Não há nenhum produto cadastrado.");

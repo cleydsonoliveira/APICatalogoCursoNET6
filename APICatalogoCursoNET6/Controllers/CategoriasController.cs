@@ -4,6 +4,7 @@ using APICatalogoCursoNET6.Pagination;
 using APICatalogoCursoNET6.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace APICatalogoCursoNET6.Controllers
 {
@@ -31,8 +32,21 @@ namespace APICatalogoCursoNET6.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<CategoriaDTO>> GetAll([FromQuery] CategoriasParameters categoriasParameters)
         {
-            var categorias = _unitOfWork.CategoriaRepository.GetCategorias(categoriasParameters).ToList();
+            var categorias = _unitOfWork.CategoriaRepository.GetCategorias(categoriasParameters);
             if (categorias == null) return NotFound();
+
+            var metadata = new
+            {
+                categorias.TotalCount,
+                categorias.PageSize,
+                categorias.CurrentPage,
+                categorias.TotalPages,
+                categorias.HasNext,
+                categorias.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
             var categoriasDTO = _mapper.Map<IEnumerable<CategoriaDTO>>(categorias);
             return Ok(categoriasDTO);
         }
