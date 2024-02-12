@@ -9,13 +9,14 @@ namespace APICatalogoCursoNET6.Repositories
     {
         public CategoriaRepository(AppDbContext appDbContext) : base(appDbContext) { }
 
-        public IEnumerable<Categoria> GetCategorias(CategoriasParameters categoriasParameters)
+        public PagedList<Categoria> GetCategorias(CategoriasParameters categoriasParameters)
         {
-            return Get()
-                .OrderBy(x => x.Nome)
-                .Skip((categoriasParameters.PageNumber - 1) * categoriasParameters.PageSize)
-                .Take(categoriasParameters.PageSize)
-                .ToList();
+            //return Get()
+            //    .OrderBy(x => x.Nome)
+            //    .Skip((categoriasParameters.PageNumber - 1) * categoriasParameters.PageSize)
+            //    .Take(categoriasParameters.PageSize)
+            //    .ToList();
+            return PagedList<Categoria>.ToPagedList(Get().OrderBy(x => x.Nome), categoriasParameters.PageNumber, categoriasParameters.PageSize);
         }
 
         public IEnumerable<Categoria> GetCategoriasProdutos()

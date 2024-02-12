@@ -5,7 +5,7 @@ namespace APICatalogoCursoNET6.Repositories
 {
     public interface ICategoriaRepository : IRepository<Categoria>
     {
-        IEnumerable<Categoria> GetCategorias(CategoriasParameters categoriasParameters);
+        PagedList<Categoria> GetCategorias(CategoriasParameters categoriasParameters);
         IEnumerable<Categoria> GetCategoriasProdutos();
     }
 }
